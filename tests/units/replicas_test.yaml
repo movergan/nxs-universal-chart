@@ -6,7 +6,6 @@ release:
   name: smoke-test
   namespace: default
 
-
 tests:
   - it: omits Deployment replicas when unset
     template: templates/workloads/deployment.yml
@@ -15,7 +14,6 @@ tests:
     asserts:
       - notExists:
           path: spec.replicas
-
 
   - it: renders the configured Deployment replicas
     template: templates/workloads/deployment.yml
@@ -27,7 +25,6 @@ tests:
           path: spec.replicas
           value: 3
 
-
   - it: honours an explicit Deployment replicas of 0
     template: templates/workloads/deployment.yml
     set:
@@ -38,7 +35,6 @@ tests:
           path: spec.replicas
           value: 0
 
-
   - it: omits StatefulSet replicas when unset
     template: templates/workloads/statefulset.yml
     set:
@@ -46,7 +42,6 @@ tests:
     asserts:
       - notExists:
           path: spec.replicas
-
 
   - it: renders the configured StatefulSet replicas
     template: templates/workloads/statefulset.yml
@@ -58,8 +53,12 @@ tests:
           path: spec.replicas
           value: 2
 
-
   - it: honours an explicit StatefulSet replicas of 0
     template: templates/workloads/statefulset.yml
     set:
       statefulSets.app.replicas: 0
+      statefulSets.app.containers.main.image: nginx:1.27.5
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 0
