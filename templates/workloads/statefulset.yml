@@ -34,26 +34,3 @@ spec:
   revisionHistoryLimit: {{ get $general "revisionHistoryLimit" }}
   {{- end }}
   selector:
-    matchLabels:
-      {{- include "helpers.app.selectorLabels" $ | nindent 6 }}
-      {{- with $statefulSet.extraSelectorLabels }}{{- include "helpers.tplvalues.render" (dict "value" . "context" $) | nindent 6 }}{{- end }}
-  template:
-    metadata:
-      labels:
-        {{- include "helpers.app.selectorLabels" $ | nindent 8 }}
-        {{- with $statefulSet.extraSelectorLabels }}{{- include "helpers.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}{{- end }}
-        {{- with $.Values.generic.podLabels }}{{- include "helpers.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}{{- end }}
-        {{- with $general.podLabels }}{{- include "helpers.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}{{- end }}
-        {{- with $statefulSet.podLabels }}{{- include "helpers.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}{{- end }}
-      annotations:
-        {{- include "helpers.workloads.podAnnotations" (dict "context" $ "general" $general "value" $statefulSet) | nindent 8 }}
-    spec:
-      {{- include "helpers.pod" (dict "value" $statefulSet "general" $general "name" $name "extraLabels" $statefulSet.extraSelectorLabels "context" $) | nindent 6 }}
-  {{- with $statefulSet.volumeClaimTemplates }}
-  volumeClaimTemplates:
-    {{- include "helpers.tplvalues.render" (dict "value" . "context" $) | nindent 4 }}
-  {{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-
